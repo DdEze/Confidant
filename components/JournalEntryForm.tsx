@@ -10,34 +10,56 @@ type Props = {
   onCancelEdit?: () => void;
 };
 
+type FormErrors = {
+  title?: string;
+  text?: string;
+  emoji?: string;
+};
+
 export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit }: Props) {
-  const [title, setTitle] = useState(editingEntry?.title || '');
-  const [text, setText] = useState(editingEntry?.text || '');
-  const [emoji, setEmoji] = useState(editingEntry?.emoji || '');
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
+  const [emoji, setEmoji] = useState('');
+  const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     if (editingEntry) {
       setTitle(editingEntry.title);
       setText(editingEntry.text);
       setEmoji(editingEntry.emoji || '');
+      setErrors({});
+    } else {
+      setTitle('');
+      setText('');
+      setEmoji('');
+      setErrors({});
     }
   }, [editingEntry]);
 
   const handleSubmit = () => {
-    if (!text.trim() || !title.trim()) return;
+    const newErrors: FormErrors = {};
+    if (!title.trim()) newErrors.title = 'El título es obligatorio';
+    if (!text.trim()) newErrors.text = 'La entrada no puede estar vacía';
+    if (!emoji) newErrors.emoji = 'Seleccioná un emoji';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
     const entry: Entry = {
       id: editingEntry?.id || Date.now().toString(),
-      title,
-      text,
+      title: title.trim(),
+      text: text.trim(),
       emoji,
-      date: editingEntry?.date || new Date().toLocaleDateString('en-CA'),
+      date: editingEntry?.date || new Date().toLocaleDateString('sv-SE'),
     };
 
     onSubmit(entry);
     setTitle('');
     setText('');
     setEmoji('');
+    setErrors({});
   };
 
   return (
@@ -48,6 +70,7 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
         value={title}
         onChangeText={setTitle}
       />
+      {errors.title && <Text style={styles.error}>{errors.title}</Text>}
 
       <TextInput
         style={[styles.input, styles.textArea]}
@@ -56,6 +79,7 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
         onChangeText={setText}
         multiline
       />
+      {errors.text && <Text style={styles.error}>{errors.text}</Text>}
 
       <View style={styles.emojiContainer}>
         {emojis.map((e) => (
@@ -64,8 +88,10 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
           </TouchableOpacity>
         ))}
       </View>
+      {errors.emoji && <Text style={styles.error}>{errors.emoji}</Text>}
 
       <Button title={editingEntry ? 'Guardar cambios' : 'Agregar'} onPress={handleSubmit} />
+
       {editingEntry && (
         <Button title="Cancelar edición" onPress={onCancelEdit} color="gray" />
       )}
@@ -99,5 +125,9 @@ const styles = StyleSheet.create({
     borderColor: '#007AFF',
     borderRadius: 6,
     padding: 2,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 8,
   },
 });
