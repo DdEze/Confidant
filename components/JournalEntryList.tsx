@@ -1,0 +1,55 @@
+import React from 'react';
+import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Entry } from '../types';
+
+type Props = {
+  entries: Entry[];
+  onDelete: (id: string) => void;
+  onEdit: (entry: Entry) => void;
+};
+
+export default function JournalEntryList({ entries, onDelete, onEdit }: Props) {
+  if (entries.length === 0) {
+    return <Text style={styles.empty}>Todavía no hay entradas. ¡Creá la primera!</Text>;
+  }
+
+  return (
+    <FlatList
+      data={entries}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View style={styles.entry}>
+          <Text style={styles.title}>
+            {item.emoji ? `${item.emoji} ` : ''}{item.title}
+          </Text>
+          <Text>{item.text}</Text>
+          <Text style={styles.date}>
+            {new Date(item.date).toLocaleDateString()}
+          </Text>
+          <Button title="Editar" onPress={() => onEdit(item)} />
+          <Button title="Eliminar" onPress={() => onDelete(item.id)} />
+        </View>
+      )}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  entry: {
+    padding: 10,
+    marginBottom: 8,
+    backgroundColor: '#f3f3f3',
+    borderRadius: 8,
+  },
+  title: {
+    fontWeight: 'bold',
+  },
+  date: {
+    color: 'gray',
+    fontSize: 12,
+  },
+  empty: {
+    fontStyle: 'italic',
+    color: 'gray',
+  },
+});

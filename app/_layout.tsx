@@ -1,29 +1,42 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { Stack, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { EntriesProvider } from '../context/EntriesContext'; // ajusta ruta según dónde esté
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [checkedAuth, setCheckedAuth] = useState(false);
+  const router = useRouter();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  useEffect(() => {
+    const checkAuth = async () => {
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+      if (!hasHardware || !isEnrolled) {
+        setCheckedAuth(true);
+        return;
+      }
+
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Autenticarse para usar Confidant',
+        fallbackLabel: 'Usar código PIN',
+      });
+
+      if (!result.success) {
+        router.replace('/auth');
+      }
+
+      setCheckedAuth(true);
+    };
+
+    checkAuth();
+  }, []);
+
+  if (!checkedAuth) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <EntriesProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </EntriesProvider>
   );
 }
