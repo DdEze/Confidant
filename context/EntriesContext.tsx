@@ -1,3 +1,5 @@
+// context/EntriesContext.tsx (ejemplo)
+
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Entry } from '../types';
 import { loadEntries, saveEntries } from '../utils/storage';
@@ -7,6 +9,7 @@ type EntriesContextType = {
   addEntry: (entry: Entry) => Promise<void>;
   deleteEntry: (id: string) => Promise<void>;
   editEntry: (entry: Entry) => Promise<void>;
+  loadAllEntries: () => Promise<void>;
 };
 
 const EntriesContext = createContext<EntriesContextType | undefined>(undefined);
@@ -15,11 +18,13 @@ export function EntriesProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<Entry[]>([]);
 
   useEffect(() => {
-    (async () => {
-      const stored = await loadEntries();
-      setEntries(stored);
-    })();
+    loadAllEntries();
   }, []);
+
+  const loadAllEntries = async () => {
+    const stored = await loadEntries();
+    setEntries(stored);
+  };
 
   const addEntry = async (entry: Entry) => {
     const updated = [entry, ...entries];
@@ -40,7 +45,7 @@ export function EntriesProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <EntriesContext.Provider value={{ entries, addEntry, deleteEntry, editEntry }}>
+    <EntriesContext.Provider value={{ entries, addEntry, deleteEntry, editEntry, loadAllEntries }}>
       {children}
     </EntriesContext.Provider>
   );

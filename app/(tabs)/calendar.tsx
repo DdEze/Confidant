@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { Entry } from '@/types';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import CalendarView from '../../components/CalendarView';
 import JournalEntryList from '../../components/JournalEntryList';
@@ -7,12 +9,22 @@ import { useEntries } from '../../context/EntriesContext';
 export default function CalendarScreen() {
   const { entries, deleteEntry, editEntry } = useEntries();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [filteredEntries, setFilteredEntries] = useState<Entry[]>([]);
 
-  const filteredEntries = entries.filter((e) => {
-    const d = new Date(e.date);
-    const formattedDate = d.toLocaleDateString('sv-SE');
-    return formattedDate === selectedDate;
-  });
+  const updateFiltered = useCallback(() => {
+    const newEntries = entries.filter((e) => {
+      const d = new Date(e.date);
+      const formattedDate = d.toISOString().split('T')[0];
+      return formattedDate === selectedDate;
+    });
+    setFilteredEntries(newEntries);
+  }, [entries, selectedDate]);
+
+  useFocusEffect(
+    useCallback(() => {
+      updateFiltered();
+    }, [entries, selectedDate])
+  );
 
   return (
     <View style={styles.container}>

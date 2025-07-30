@@ -1,3 +1,4 @@
+import { getLocalDateISO } from '@/utils/date';
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Entry } from '../types';
@@ -52,7 +53,7 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
       title: title.trim(),
       text: text.trim(),
       emoji,
-      date: editingEntry?.date || new Date().toLocaleDateString('sv-SE'),
+      date: editingEntry?.date || getLocalDateISO(),
     };
 
     onSubmit(entry);

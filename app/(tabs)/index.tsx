@@ -2,41 +2,26 @@
 
 import JournalEntryForm from '@/components/JournalEntryForm';
 import JournalEntryList from '@/components/JournalEntryList';
+import { useEntries } from '@/context/EntriesContext';
 import { Entry } from '@/types';
-import { loadEntries, saveEntries } from '@/utils/storage';
-import { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [editingEntry, setEditingEntry] = useState<Entry | null>(null);
-
-  useEffect(() => {
-    const fetchEntries = async () => {
-      const stored = await loadEntries();
-      setEntries(stored);
-    };
-    fetchEntries();
-  }, []);
+  const { entries, addEntry, deleteEntry, editEntry } = useEntries();
+  const [editingEntry, setEditingEntry] = React.useState<Entry | null>(null);
 
   const handleAddOrUpdateEntry = async (entry: Entry) => {
-    let updated: Entry[];
-
     if (editingEntry) {
-      updated = entries.map((e) => (e.id === entry.id ? entry : e));
+      await editEntry(entry);
     } else {
-      updated = [entry, ...entries];
+      await addEntry(entry);
     }
-
-    setEntries(updated);
-    await saveEntries(updated);
     setEditingEntry(null);
   };
 
   const handleDeleteEntry = async (id: string) => {
-    const updated = entries.filter((e) => e.id !== id);
-    setEntries(updated);
-    await saveEntries(updated);
+    await deleteEntry(id);
   };
 
   const handleEditEntry = (entry: Entry) => {

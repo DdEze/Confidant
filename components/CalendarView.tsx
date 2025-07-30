@@ -5,14 +5,16 @@ import { Calendar } from 'react-native-calendars';
 type Props = {
   onDateSelect: (date: string) => void;
   selectedDate: string;
+  markedDates?: { [date: string]: any };
 };
 
-export default function CalendarView({ onDateSelect, selectedDate }: Props) {
+export default function CalendarView({ onDateSelect, selectedDate, markedDates = {} }: Props) {
   return (
     <View style={styles.container}>
       <Calendar
         onDayPress={(day) => onDateSelect(day.dateString)}
         markedDates={{
+          ...markedDates,
           [selectedDate]: {
             selected: true,
             marked: true,

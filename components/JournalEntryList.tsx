@@ -1,5 +1,6 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entry } from '../types';
 
 type Props = {
@@ -7,6 +8,8 @@ type Props = {
   onDelete: (id: string) => void;
   onEdit: (entry: Entry) => void;
 };
+
+const router = useRouter();
 
 export default function JournalEntryList({ entries, onDelete, onEdit }: Props) {
   if (entries.length === 0) {
@@ -19,13 +22,24 @@ export default function JournalEntryList({ entries, onDelete, onEdit }: Props) {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <View style={styles.entry}>
-          <Text style={styles.title}>
-            {item.emoji ? `${item.emoji} ` : ''}{item.title}
-          </Text>
-          <Text>{item.text}</Text>
-          <Text style={styles.date}>
-            {new Date(item.date).toLocaleDateString()}
-          </Text>
+          <TouchableOpacity
+            onPress={() => router.push({
+              pathname: '/entry/[id]',
+              params: { id: item.id },
+            })}
+          >
+            <Text style={styles.title}>
+              {item.emoji ? `${item.emoji} ` : ''}{item.title}
+            </Text>
+            <Text>{item.text}</Text>
+            <Text style={styles.date}>
+              {new Date(item.date + 'T12:00:00').toLocaleDateString('es-AR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </Text>
+          </TouchableOpacity>
           <Button title="Editar" onPress={() => onEdit(item)} />
           <Button title="Eliminar" onPress={() => onDelete(item.id)} />
         </View>
@@ -43,6 +57,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
+    fontSize: 16,
   },
   date: {
     color: 'gray',
@@ -51,5 +66,7 @@ const styles = StyleSheet.create({
   empty: {
     fontStyle: 'italic',
     color: 'gray',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });
