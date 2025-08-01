@@ -18,20 +18,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <Ionicons name="calendar" color={color} size={size} />,
         }}
       />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="stats"
         options={{
           title: 'Estadísticas',
           tabBarIcon: ({ color, size }) => <Ionicons name="bar-chart" color={color} size={size} />,
         }}
       />
-      <Tabs.Screen
-        name="config"
-        options={{
-          title: 'Ajustes',
-          tabBarIcon: ({ color, size }) => <Ionicons name="settings" color={color} size={size} />,
-        }}
-      /> */}
     </Tabs>
   );
 }
