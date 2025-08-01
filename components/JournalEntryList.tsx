@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entry } from '../types';
 
 type Props = {
@@ -32,6 +32,13 @@ export default function JournalEntryList({ entries, onDelete, onEdit }: Props) {
               {item.emoji ? `${item.emoji} ` : ''}{item.title}
             </Text>
             <Text>{item.text}</Text>
+            {item.image && (
+              <Image
+                source={{ uri: item.image }}
+                style={styles.thumbnail}
+                resizeMode="cover"
+              />
+            )}
             <Text style={styles.date}>
               {new Date(item.date + 'T12:00:00').toLocaleDateString('es-AR', {
                 year: 'numeric',
@@ -68,5 +75,12 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginTop: 20,
     textAlign: 'center',
+  },
+
+  thumbnail: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
+    marginVertical: 8,
   },
 });

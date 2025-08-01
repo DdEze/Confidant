@@ -4,7 +4,7 @@ import { useEntries } from '@/context/EntriesContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import React, { useLayoutEffect } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function EntryDetail() {
   const { id } = useLocalSearchParams();
@@ -39,8 +39,15 @@ export default function EntryDetail() {
     <View style={styles.container}>
       <Text style={styles.emoji}>{entry.emoji}</Text>
       <Text style={styles.title}>{entry.title}</Text>
-      <Text style={styles.date}>{entry.date}</Text>
       <Text style={styles.text}>{entry.text}</Text>
+      {entry.image && (
+        <Image
+          source={{ uri: entry.image }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      )}
+      <Text style={styles.date}>{entry.date}</Text>
     </View>
   );
 }
@@ -51,4 +58,10 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: 'bold', marginVertical: 8 },
   date: { color: 'gray', marginBottom: 16 },
   text: { fontSize: 16 },
+  image: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
 });

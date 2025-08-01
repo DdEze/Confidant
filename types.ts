@@ -3,5 +3,6 @@ export interface Entry {
   title: string;
   text: string;
   date: string;
-  emoji?: string;
+  emoji: string;
+  image?: string;
 }
