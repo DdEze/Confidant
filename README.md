@@ -1,50 +1,120 @@
-# Welcome to your Expo app 👋
+# Confidant – Tu diario emocional digital
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![React Native](https://img.shields.io/badge/React_Native-0.74.0-61DAFB?logo=react&logoColor=white&style=flat)
+![Expo](https://img.shields.io/badge/Expo-50.0.0-000020?logo=expo&logoColor=white&style=flat)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-3178C6?logo=typescript&logoColor=white&style=flat)
+![React Navigation](https://img.shields.io/badge/React_Navigation-6.1.6-000000?logo=reactrouter&style=flat)
+![AsyncStorage](https://img.shields.io/badge/AsyncStorage-Persistence-FC8019?style=flat&logo=databricks&logoColor=white)
+![Status](https://img.shields.io/badge/status-en%20desarrollo-yellow)
+![License](https://img.shields.io/github/license/DdEze/WeatherOn)
 
-## Get started
+---
 
-1. Install dependencies
+## Descripción
 
-   ```bash
-   npm install
-   ```
+**Confidant** es una aplicación de diario emocional desarrollada en React Native con Expo, pensada para ayudarte a llevar un registro diario de tus emociones, pensamientos y actividades. Cada entrada permite identificar cómo te sentiste en el día mediante un emoji, acompañarlo con un texto reflexivo y luego visualizar todo en un historial accesible y ordenado por fecha.
 
-2. Start the app
+La app incluye un gráfico de entradas semanales, lo que permite visualizar la frecuencia de tus registros a lo largo del tiempo. Esto facilita notar patrones emocionales o hábitos personales. La interfaz está diseñada para ser simple, amigable y funcional, permitiendo escribir con libertad y sin distracciones.
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## Características principales
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **Escribir entradas diarias** con título, contenido y selección de estado emocional mediante emojis.
+- **Editor completo** que permite crear nuevas entradas o editar las ya existentes.
+- **Guardado automático** de las entradas para evitar pérdidas de información.
+- **Adjuntar imágenes** a cada entrada para hacerlas más personales y visuales.
+- **Visualización por calendario**, para navegar y consultar entradas según el día.
+- **Protección con PIN** para mantener la privacidad de tus pensamientos.
+- **Recordatorio diario** a las 20:00 hs para motivarte a escribir tu entrada del día.
+- **Estadísticas y análisis**:
+  - Cantidad de entradas semanales.
+  - Emojis más usados para entender tu estado emocional a lo largo del tiempo.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## Roadmap futuro
 
-When you're ready, run:
+- Modo oscuro 🌙
+
+- Backup en la nube (Google Drive o iCloud)
+
+- Compartir entradas como imágenes o PDF
+
+- Exportar estadísticas a CSV
+
+- Widgets para ver el emoji del día desde el inicio
+
+---
+
+## Tecnologías y librerías utilizadas
+
+- **React Native** (versión 0.79.5)
+- **Expo Go** y SDK Expo 53
+- Navegación con **expo-router** y **React Navigation**
+- Manejo de estados y contexto con React Context API
+- **Async Storage** para persistencia local
+- Selección y manejo de imágenes con **expo-image-picker**
+- Calendario con **react-native-calendars**
+- Gráficos estadísticos con **react-native-chart-kit**
+- Notificaciones locales con **expo-notifications**
+- Autenticación biométrica y PIN con **expo-local-authentication**
+- Formato y manejo de fechas con **date-fns** y **dayjs**
+- Íconos vectoriales con **@expo/vector-icons** y **react-native-vector-icons**
+
+---
+
+##  Instalación (modo local)
 
 ```bash
-npm run reset-project
+git clone https://github.com/tu-usuario/confidant.git
+cd confidant
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Estructura del proyecto
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+├── .expo
+├── .vscode
+├── app
+│   ├── (tabs)
+│   │     ├── _layout.tsx
+│   │     ├── calendar.tsx
+│   │     ├── index.tsx
+│   │     └── stats.tsx
+│   ├── auth
+│   │     └── index.tsx
+│   ├── entry
+│   │     ├── _layout.tsx
+│   │     └── [id].tsx
+│   └── _layout.tsx
+├── components
+│   ├── CalendarView.tsx
+│   ├── JournalEntryForm.tsx
+│   └── JournalEntryList.tsx
+├── context
+│   └── EntriesContext.tsx
+├── node_modules
+├── utils
+│   ├── date.ts
+│   ├── notificationService.ts
+│   ├── getUvIndex.ts
+│   └── storage.ts
+├── .gitignore
+├── app.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.json
+└── types.ts
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## Licencia
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+MIT License © 2025 [De Dominicis Ezequiel]
