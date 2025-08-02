@@ -2,12 +2,17 @@ import JournalEntryForm from '@/components/JournalEntryForm';
 import JournalEntryList from '@/components/JournalEntryList';
 import { useEntries } from '@/context/EntriesContext';
 import { Entry } from '@/types';
-import React from 'react';
+import { ensureNotificationSetup } from '@/utils/notificationService';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   const { entries, addEntry, deleteEntry, editEntry } = useEntries();
   const [editingEntry, setEditingEntry] = React.useState<Entry | null>(null);
+
+  useEffect(() => {
+    ensureNotificationSetup();
+  }, []);
 
   const handleAddOrUpdateEntry = async (entry: Entry) => {
     if (editingEntry) {
