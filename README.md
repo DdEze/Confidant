@@ -35,7 +35,7 @@ La app incluye un gráfico de entradas semanales, lo que permite visualizar la f
 
 ## Roadmap futuro
 
-- Modo oscuro 🌙
+- Modo oscuro
 
 - Backup en la nube (Google Drive o iCloud)
 
