@@ -1,5 +1,3 @@
-'use client';
-
 import JournalEntryForm from '@/components/JournalEntryForm';
 import JournalEntryList from '@/components/JournalEntryList';
 import { useEntries } from '@/context/EntriesContext';
@@ -32,33 +30,74 @@ export default function HomeScreen() {
     setEditingEntry(null);
   };
 
+  if (entries.length === 0) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', flex: 1 }]}>
+        <Text style={styles.title}>Mi Diario 🖋</Text>
+        <View style={styles.card}>
+          <JournalEntryForm
+            onSubmit={handleAddOrUpdateEntry}
+            editingEntry={editingEntry}
+            onCancelEdit={handleCancelEdit}
+          />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mi Diario</Text>
-
-      <JournalEntryForm
-        onSubmit={handleAddOrUpdateEntry}
-        editingEntry={editingEntry}
-        onCancelEdit={handleCancelEdit}
-      />
+      <Text style={styles.title}>Mi Diario 🖋</Text>
 
       <JournalEntryList
         entries={entries}
         onDelete={handleDeleteEntry}
         onEdit={handleEditEntry}
+        ListHeaderComponent={
+          <View style={styles.card}>
+            <JournalEntryForm
+              onSubmit={handleAddOrUpdateEntry}
+              editingEntry={editingEntry}
+              onCancelEdit={handleCancelEdit}
+            />
+          </View>
+        }
       />
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    gap: 16,
-    flex: 1
+    flex: 1,
+    paddingTop: 48,
+    paddingHorizontal: 16,
+    backgroundColor: '#a389a0ff',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: '#42293fff',
+    marginBottom: 16,
+    fontStyle: 'italic',
+  },
+  card: {
+    backgroundColor: '#f8edf7ff',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 4,
+  },
+  formNoCard: {
+    padding: 16,
+    marginBottom: 20,
+  },
+  listContentContainer: {
+    paddingBottom: 40,
+    flexGrow: 1,
   },
 });

@@ -26,9 +26,26 @@ export default function CalendarScreen() {
     }, [entries, selectedDate])
   );
 
+  const markedDates = entries.reduce<{ [key: string]: any }>((acc, entry) => {
+    const dateStr = new Date(entry.date).toISOString().split('T')[0];
+    acc[dateStr] = {
+      marked: true,
+      dotColor: '#50cebb',
+      ...(dateStr === selectedDate && {
+        selected: true,
+        selectedColor: '#00adf5',
+      }),
+    };
+    return acc;
+  }, {});
+
   return (
     <View style={styles.container}>
-      <CalendarView selectedDate={selectedDate} onDateSelect={setSelectedDate} />
+      <CalendarView
+        selectedDate={selectedDate}
+        onDateSelect={setSelectedDate}
+        markedDates={markedDates}
+      />
       {filteredEntries.length === 0 ? (
         <Text style={styles.noEntriesText}>No hay entradas para {selectedDate}</Text>
       ) : (
@@ -44,8 +61,10 @@ export default function CalendarScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 40,
+    paddingHorizontal: 16,
     flex: 1,
-    padding: 16,
+    backgroundColor: '#a389a0ff',
   },
   noEntriesText: {
     fontStyle: 'italic',

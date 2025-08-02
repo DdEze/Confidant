@@ -1,7 +1,7 @@
 import { useEntries } from '@/context/EntriesContext';
 import { format, parseISO, startOfWeek } from 'date-fns';
 import React from 'react';
-import { Dimensions, ScrollView, Text, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 
 export default function StatsScreen() {
@@ -46,54 +46,83 @@ export default function StatsScreen() {
   }));
 
   return (
-    <ScrollView>
-      <View style={{ marginTop: 20, alignItems: 'center' }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
-          Entradas esta semana
-        </Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.chartCard}>
+        <Text style={styles.chartTitle}>Entradas esta semana</Text>
         <BarChart
           data={{
             labels: weeklyStats.labels,
             datasets: [{ data: weeklyStats.data }],
           }}
-          width={Dimensions.get('window').width - 30}
+          width={Dimensions.get('window').width - 40}
           height={220}
           yAxisLabel=""
           yAxisSuffix=""
-          chartConfig={{
-            backgroundColor: '#ffffff',
-            backgroundGradientFrom: '#ffffff',
-            backgroundGradientTo: '#ffffff',
-            decimalPlaces: 0,
-            color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            propsForBackgroundLines: {
-              strokeDasharray: '',
-            },
-          }}
-          style={{
-            borderRadius: 8,
-            marginVertical: 8,
-          }}
+          chartConfig={chartConfig}
+          style={styles.chartStyle}
         />
       </View>
 
-      <View style={{ marginTop: 20, alignItems: 'center' }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
-          Emojis más usados
-        </Text>
+      <View style={styles.chartCard}>
+        <Text style={styles.chartTitle}>Emojis más usados</Text>
         <PieChart
           data={emojiData}
-          width={Dimensions.get('window').width - 30}
+          width={Dimensions.get('window').width - 40}
           height={220}
-          chartConfig={{
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
+          chartConfig={chartConfig}
           accessor="population"
           backgroundColor="transparent"
           paddingLeft="10"
+          style={{ marginVertical: 8 }}
         />
       </View>
     </ScrollView>
   );
 }
+
+const chartConfig = {
+  backgroundColor: '#f8edf7ff',
+  backgroundGradientFrom: '#f8edf7ff',
+  backgroundGradientTo: '#f8edf7ff',
+  decimalPlaces: 0,
+  color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(50, 50, 50, ${opacity})`,
+  style: {
+    borderRadius: 16,
+  },
+  propsForBackgroundLines: {
+    strokeDasharray: '',
+  },
+};
+
+const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#a389a0ff',
+    alignItems: 'center',
+  },
+  chartCard: {
+    width: '100%',
+    backgroundColor: '#f8edf7ff',
+    borderRadius: 16,
+    padding: 16,
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 3,
+    alignItems: 'center',
+  },
+  chartTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 12,
+    color: '#333',
+    fontStyle: 'italic',
+  },
+  chartStyle: {
+    borderRadius: 16,
+  },
+});

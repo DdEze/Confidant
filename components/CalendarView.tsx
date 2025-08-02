@@ -18,7 +18,7 @@ export default function CalendarView({ onDateSelect, selectedDate, markedDates =
           [selectedDate]: {
             selected: true,
             marked: true,
-            selectedColor: '#00adf5',
+            selectedColor: '#e4a3dcff',
           },
         }}
       />

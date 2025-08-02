@@ -1,10 +1,18 @@
 import { getLocalDateISO } from '@/utils/date';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
-import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Entry } from '../types';
 
-const emojis = ['😀', '😢', '😡', '😴', '😍'];
+const emojis = ['😀', '😢', '😡', '😴', '😍', '😑',
+                '😔', '🤢', '😨', '🤩', '😇', '🤓'];
 
 type Props = {
   onSubmit: (entry: Entry) => void;
@@ -18,7 +26,11 @@ type FormErrors = {
   emoji?: string;
 };
 
-export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit }: Props) {
+export default function JournalEntryForm({
+  onSubmit,
+  editingEntry,
+  onCancelEdit,
+}: Props) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [emoji, setEmoji] = useState('');
@@ -87,6 +99,7 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
         value={title}
         onChangeText={setTitle}
         style={styles.input}
+        placeholderTextColor="#888"
       />
       {errors.title && <Text style={styles.error}>{errors.title}</Text>}
 
@@ -95,10 +108,12 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
         value={text}
         onChangeText={setText}
         multiline
-        style={[styles.input, { height: 100 }]}
+        style={[styles.input, styles.textArea]}
+        placeholderTextColor="#888"
       />
       {errors.text && <Text style={styles.error}>{errors.text}</Text>}
 
+      <Text style={styles.label}>Estado emocional</Text>
       <View style={styles.emojiContainer}>
         {emojis.map((e) => (
           <TouchableOpacity key={e} onPress={() => setEmoji(e)}>
@@ -108,19 +123,26 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
       </View>
       {errors.emoji && <Text style={styles.error}>{errors.emoji}</Text>}
 
-      <Button title="Seleccionar imagen" onPress={pickImage} />
+      <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+        <Text style={styles.imageButtonText}>📸 Seleccionar imagen</Text>
+      </TouchableOpacity>
+
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: 200, height: 200, marginVertical: 10, borderRadius: 8 }}
+          style={styles.imagePreview}
         />
       )}
 
-      <Button title={editingEntry ? 'Actualizar entrada' : 'Guardar entrada'} onPress={handleSubmit} />
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <Text style={styles.submitButtonText}>
+          {editingEntry ? 'Actualizar entrada' : 'Guardar entrada'}
+        </Text>
+      </TouchableOpacity>
 
       {editingEntry && onCancelEdit && (
-        <TouchableOpacity onPress={onCancelEdit} style={{ marginTop: 10 }}>
-          <Text style={{ color: 'red' }}>Cancelar edición</Text>
+        <TouchableOpacity onPress={onCancelEdit} style={styles.cancelEdit}>
+          <Text style={styles.cancelEditText}>Cancelar edición</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -128,16 +150,80 @@ export default function JournalEntryForm({ onSubmit, editingEntry, onCancelEdit 
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
+  container: {
+    gap: 12,
+  },
   input: {
     borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 6,
-    padding: 10,
-    marginVertical: 8,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#fdfdfd',
   },
-  emojiContainer: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 },
-  emoji: { fontSize: 30 },
-  selectedEmoji: { backgroundColor: '#d0e8ff', borderRadius: 5 },
-  error: { color: 'red', marginBottom: 5 },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  label: {
+    fontWeight: '600',
+    fontSize: 16,
+    marginTop: 8,
+    color: '#444',
+  },
+  emojiContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 8,
+    flexWrap: 'wrap',
+  },
+  emoji: {
+    fontSize: 32,
+    padding: 6,
+  },
+  selectedEmoji: {
+    backgroundColor: '#dceeff',
+    borderRadius: 8,
+  },
+  imageButton: {
+    backgroundColor: '#e4a3dcff',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  imageButtonText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#42293fff',
+  },
+  imagePreview: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  submitButton: {
+    backgroundColor: '#42293fff',
+    padding: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  cancelEdit: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  cancelEditText: {
+    color: '#c0392b',
+    fontWeight: '500',
+  },
+  error: {
+    color: 'red',
+    fontSize: 13,
+  },
 });
